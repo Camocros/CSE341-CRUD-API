@@ -1,0 +1,303 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "W03 CRUD API",
+    "description": "API for Cases and Materials"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "paths": {
+    "/cases": {
+      "get": {
+        "tags": [
+          "Cases"
+        ],
+        "summary": "Get all cases",
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Cases"
+        ],
+        "summary": "Create a new case",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Case object that needs to be added",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Case"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Case created"
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/cases/{id}": {
+      "get": {
+        "tags": [
+          "Cases"
+        ],
+        "summary": "Get a case by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of case to return",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "404": {
+            "description": "Case not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Cases"
+        ],
+        "summary": "Update an existing case",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of case to update",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Case object that needs to be updated",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Case"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful operation"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "404": {
+            "description": "Case not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Cases"
+        ],
+        "summary": "Delete a case",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Case ID to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful operation"
+          },
+          "404": {
+            "description": "Case not found"
+          }
+        }
+      }
+    },
+    "/materials": {
+      "get": {
+        "tags": [
+          "Materials"
+        ],
+        "summary": "Get all materials",
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Materials"
+        ],
+        "summary": "Create a new material",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Material object that needs to be added",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Material"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Material created"
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/materials/{id}": {
+      "get": {
+        "tags": [
+          "Materials"
+        ],
+        "summary": "Get a material by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of material to return",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "404": {
+            "description": "Material not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Materials"
+        ],
+        "summary": "Update an existing material",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of material to update",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Material object that needs to be updated",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Material"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful operation"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "404": {
+            "description": "Material not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Materials"
+        ],
+        "summary": "Delete a material",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Material ID to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful operation"
+          },
+          "404": {
+            "description": "Material not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Case": {
+      "type": "object",
+      "properties": {
+        "caseNumber": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "dateOpened": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "assignedTo": {
+          "type": "string"
+        },
+        "priority": {
+          "type": "string"
+        }
+      }
+    },
+    "Material": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "quantity": {
+          "type": "number"
+        },
+        "unit": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
