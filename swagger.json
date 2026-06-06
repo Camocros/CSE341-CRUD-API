@@ -2,8 +2,8 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0.0",
-    "title": "W03 CRUD API",
-    "description": "API for Cases and Materials"
+    "title": "W04 CRUD API with OAuth",
+    "description": "API for Cases and Materials with GitHub OAuth Authentication"
   },
   "host": "localhost:3000",
   "basePath": "/",
@@ -11,13 +11,83 @@
     "http",
     "https"
   ],
+  "securityDefinitions": {
+    "oauth2": {
+      "type": "oauth2",
+      "authorizationUrl": "https://github.com/login/oauth/authorize",
+      "flow": "implicit",
+      "scopes": {
+        "user:email": "Read user email"
+      }
+    }
+  },
   "paths": {
+    "/auth/login": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Login with GitHub OAuth",
+        "description": "Redirects to GitHub OAuth login page",
+        "responses": {
+          "302": {
+            "description": "Redirect to GitHub OAuth"
+          }
+        }
+      }
+    },
+    "/auth/callback": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "GitHub OAuth Callback",
+        "description": "Callback URL for GitHub OAuth (handled automatically by GitHub)",
+        "responses": {
+          "302": {
+            "description": "Redirect to profile after successful authentication"
+          }
+        }
+      }
+    },
+    "/auth/profile": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Get current user profile",
+        "description": "Returns the authenticated user's profile information",
+        "responses": {
+          "200": {
+            "description": "User profile retrieved successfully"
+          },
+          "401": {
+            "description": "User not authenticated"
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Logout",
+        "description": "Destroys the user session and logs out",
+        "responses": {
+          "200": {
+            "description": "Logged out successfully"
+          }
+        }
+      }
+    },
     "/cases": {
       "get": {
         "tags": [
           "Cases"
         ],
         "summary": "Get all cases",
+        "description": "Public endpoint - no authentication required",
         "responses": {
           "200": {
             "description": "Successful operation"
@@ -29,6 +99,12 @@
           "Cases"
         ],
         "summary": "Create a new case",
+        "description": "Requires GitHub OAuth authentication",
+        "security": [
+          {
+            "oauth2": ["user:email"]
+          }
+        ],
         "parameters": [
           {
             "in": "body",
@@ -46,6 +122,9 @@
           },
           "400": {
             "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized - authentication required"
           }
         }
       }
@@ -56,6 +135,7 @@
           "Cases"
         ],
         "summary": "Get a case by ID",
+        "description": "Public endpoint - no authentication required",
         "parameters": [
           {
             "name": "id",
@@ -79,6 +159,12 @@
           "Cases"
         ],
         "summary": "Update an existing case",
+        "description": "Requires GitHub OAuth authentication",
+        "security": [
+          {
+            "oauth2": ["user:email"]
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -104,6 +190,9 @@
           "400": {
             "description": "Invalid input"
           },
+          "401": {
+            "description": "Unauthorized - authentication required"
+          },
           "404": {
             "description": "Case not found"
           }
@@ -114,6 +203,12 @@
           "Cases"
         ],
         "summary": "Delete a case",
+        "description": "Requires GitHub OAuth authentication",
+        "security": [
+          {
+            "oauth2": ["user:email"]
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -127,6 +222,9 @@
           "204": {
             "description": "Successful operation"
           },
+          "401": {
+            "description": "Unauthorized - authentication required"
+          },
           "404": {
             "description": "Case not found"
           }
@@ -139,6 +237,7 @@
           "Materials"
         ],
         "summary": "Get all materials",
+        "description": "Public endpoint - no authentication required",
         "responses": {
           "200": {
             "description": "Successful operation"
@@ -150,6 +249,12 @@
           "Materials"
         ],
         "summary": "Create a new material",
+        "description": "Requires GitHub OAuth authentication",
+        "security": [
+          {
+            "oauth2": ["user:email"]
+          }
+        ],
         "parameters": [
           {
             "in": "body",
@@ -167,6 +272,9 @@
           },
           "400": {
             "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized - authentication required"
           }
         }
       }
@@ -177,6 +285,7 @@
           "Materials"
         ],
         "summary": "Get a material by ID",
+        "description": "Public endpoint - no authentication required",
         "parameters": [
           {
             "name": "id",
@@ -200,6 +309,12 @@
           "Materials"
         ],
         "summary": "Update an existing material",
+        "description": "Requires GitHub OAuth authentication",
+        "security": [
+          {
+            "oauth2": ["user:email"]
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -225,6 +340,9 @@
           "400": {
             "description": "Invalid input"
           },
+          "401": {
+            "description": "Unauthorized - authentication required"
+          },
           "404": {
             "description": "Material not found"
           }
@@ -235,6 +353,12 @@
           "Materials"
         ],
         "summary": "Delete a material",
+        "description": "Requires GitHub OAuth authentication",
+        "security": [
+          {
+            "oauth2": ["user:email"]
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -248,6 +372,9 @@
           "204": {
             "description": "Successful operation"
           },
+          "401": {
+            "description": "Unauthorized - authentication required"
+          },
           "404": {
             "description": "Material not found"
           }
@@ -258,44 +385,59 @@
   "definitions": {
     "Case": {
       "type": "object",
+      "required": ["caseNumber", "title", "description", "dateOpened", "status", "assignedTo", "priority"],
       "properties": {
         "caseNumber": {
-          "type": "string"
+          "type": "string",
+          "description": "Unique case number"
         },
         "title": {
-          "type": "string"
+          "type": "string",
+          "description": "Case title"
         },
         "description": {
-          "type": "string"
+          "type": "string",
+          "description": "Detailed case description"
         },
         "dateOpened": {
-          "type": "string"
+          "type": "string",
+          "description": "Date case was opened"
         },
         "status": {
-          "type": "string"
+          "type": "string",
+          "enum": ["open", "in_progress", "closed"],
+          "description": "Current case status"
         },
         "assignedTo": {
-          "type": "string"
+          "type": "string",
+          "description": "Person assigned to case"
         },
         "priority": {
-          "type": "string"
+          "type": "string",
+          "enum": ["low", "medium", "high"],
+          "description": "Case priority level"
         }
       }
     },
     "Material": {
       "type": "object",
+      "required": ["name", "type", "quantity", "unit"],
       "properties": {
         "name": {
-          "type": "string"
+          "type": "string",
+          "description": "Material name"
         },
         "type": {
-          "type": "string"
+          "type": "string",
+          "description": "Material type/category"
         },
         "quantity": {
-          "type": "number"
+          "type": "number",
+          "description": "Quantity available"
         },
         "unit": {
-          "type": "string"
+          "type": "string",
+          "description": "Unit of measurement (kg, lbs, pieces, etc.)"
         }
       }
     }

@@ -1,5 +1,7 @@
 const express = require('express');
 const cors = require('cors');
+const session = require('express-session');
+const passport = require('./config/passport');
 require('dotenv').config();
 
 const mongodb = require('./data/database');
@@ -9,6 +11,22 @@ const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
+
+// Configure session
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'your-secret-key',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { 
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000 
+  }
+}));
+
+// Initialize passport
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/', require('./routes'));
 app.get('/test-db', async (req, res) => {
