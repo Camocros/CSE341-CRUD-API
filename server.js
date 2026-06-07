@@ -1,8 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
 const passport = require('./config/passport');
-require('dotenv').config();
 
 const mongodb = require('./data/database');
 
