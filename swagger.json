@@ -6,10 +6,6 @@
     "description": "API for Cases and Materials with GitHub OAuth Authentication"
   },
   "basePath": "/",
-  "schemes": [
-    "http",
-    "https"
-  ],
   "securityDefinitions": {
     "oauth2": {
       "type": "oauth2",
