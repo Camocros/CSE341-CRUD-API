@@ -13,6 +13,9 @@ const getAll = async (req, res) => {
 
 const getSingle = async (req, res) => {
   try {
+    if (!ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: 'Must use a valid case id to find a case.' });
+    }
     const db = mongodb.getDb();
     const caseId = new ObjectId(req.params.id);
     const result = await db.collection('cases').findOne({ _id: caseId });
@@ -54,6 +57,9 @@ const updateCase = async (req, res) => {
     }
 
     const db = mongodb.getDb();
+    if (!ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: 'Must use a valid case id to update a case.' });
+    }
     const caseId = new ObjectId(req.params.id);
     const updatedCase = { caseNumber, title, description, dateOpened, status, assignedTo, priority };
     
@@ -72,6 +78,9 @@ const updateCase = async (req, res) => {
 const deleteCase = async (req, res) => {
   try {
     const db = mongodb.getDb();
+    if (!ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: 'Must use a valid case id to delete a case.' });
+    }
     const caseId = new ObjectId(req.params.id);
     const response = await db.collection('cases').deleteOne({ _id: caseId });
     

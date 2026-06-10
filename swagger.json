@@ -5,7 +5,6 @@
     "title": "W04 CRUD API with OAuth",
     "description": "API for Cases and Materials with GitHub OAuth Authentication"
   },
-  "host": "localhost:3000",
   "basePath": "/",
   "schemes": [
     "http",

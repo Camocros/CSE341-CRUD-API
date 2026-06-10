@@ -13,6 +13,9 @@ const getAll = async (req, res) => {
 
 const getSingle = async (req, res) => {
   try {
+    if (!ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: 'Must use a valid material id to find a material.' });
+    }
     const db = mongodb.getDb();
     const materialId = new ObjectId(req.params.id);
     const result = await db.collection('materials').findOne({ _id: materialId });
@@ -54,6 +57,9 @@ const updateMaterial = async (req, res) => {
     }
 
     const db = mongodb.getDb();
+    if (!ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: 'Must use a valid material id to update a material.' });
+    }
     const materialId = new ObjectId(req.params.id);
     const updatedMaterial = { name, type, quantity, unit };
     
@@ -72,6 +78,9 @@ const updateMaterial = async (req, res) => {
 const deleteMaterial = async (req, res) => {
   try {
     const db = mongodb.getDb();
+    if (!ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: 'Must use a valid material id to delete a material.' });
+    }
     const materialId = new ObjectId(req.params.id);
     const response = await db.collection('materials').deleteOne({ _id: materialId });
     
